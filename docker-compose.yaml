@@ -1,0 +1,33 @@
+version: '3.8'
+services:
+  # 1. ฐานข้อมูลสำหรับเก็บข้อมูล eSports
+  postgres:
+    image: postgres:13
+    environment:
+      - POSTGRES_USER=boss_admin
+      - POSTGRES_PASSWORD=password123
+      - POSTGRES_DB=moba_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # 2. Apache Airflow (แบบ Standalone เพื่อความเร็วในการรันในเครื่อง)
+  airflow:
+    image: apache/airflow:2.7.1-python3.9
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://boss_admin:password123@postgres/moba_db
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./scripts:/opt/airflow/scripts
+      - ./data:/opt/airflow/data
+    ports:
+      - "8080:8080"
+    command: standalone
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
