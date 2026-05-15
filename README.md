@@ -32,33 +32,36 @@
 ```bash
 git clone [https://github.com/maytuchs-spec/moba_etl_project.git](https://github.com/maytuchs-spec/moba_etl_project.git)
 cd moba_etl_project
+```
 
-2. Start the Pipeline Infrastructure:
+**2. Start the Pipeline Infrastructure:**
 รันคำสั่งเพื่อเปิดใช้งาน Airflow และระบบหลังบ้าน
-
-Bash
+```bash
 docker-compose up -d
-3. Execute the ETL Pipeline:
+```
 
-เข้าไปที่ http://localhost:8080 (User: airflow / Pass: airflow)
+**3. Execute the ETL Pipeline:**
+* เข้าไปที่ `http://localhost:8080` (User: `airflow` / Pass: `airflow`)
+* กดเปิดใช้งาน (Unpause) และสั่ง Trigger DAG ที่ชื่อ `moba_esport_etl` เพื่อเริ่มกระบวนการดึงและแปลงข้อมูล
 
-กดเปิดใช้งาน (Unpause) และสั่ง Trigger DAG ที่ชื่อ moba_esport_etl เพื่อเริ่มกระบวนการดึงและแปลงข้อมูล
+---
 
-📊 Run Dashboard (วิธีรันแดชบอร์ด)
+## 📊 Run Dashboard (วิธีรันแดชบอร์ด)
 หลังจากที่ Pipeline ทำงานเสร็จและมีข้อมูลใน Database แล้ว สามารถรัน Dashboard เพื่อดูผลลัพธ์ได้ดังนี้:
 
-รันคำสั่ง Streamlit ผ่าน Docker:
-
-Bash
+1. **รันคำสั่ง Streamlit ผ่าน Docker:**
+```bash
 docker run -it --rm -p 8501:8501 -v "${PWD}:/app" -w /app python:3.9 bash -c "pip install streamlit pandas plotly sqlalchemy && python -m streamlit run dashboard.py --server.address 0.0.0.0"
-เข้าดูผลลัพธ์:
+```
 
-เปิด Browser ไปที่ http://localhost:8501
+2. **เข้าดูผลลัพธ์:**
+* เปิด Browser ไปที่ `http://localhost:8501`
+* คุณจะพบกับหน้าจอสรุปสถิติ Win Rate, KDA และกราฟวิเคราะห์ Performance ของฮีโร่และผู้เล่น
 
-คุณจะพบกับหน้าจอสรุปสถิติ Win Rate, KDA และกราฟวิเคราะห์ Performance ของฮีโร่และผู้เล่น
+---
 
-📂 Project Structure (โครงสร้างโปรเจกต์)
-Plaintext
+## 📂 Project Structure (โครงสร้างโปรเจกต์)
+```text
 moba_etl_project/
 ├── dags/
 │   └── moba_etl_dag.py        # ไฟล์คุมลำดับงาน (DAG)
@@ -72,10 +75,4 @@ moba_etl_project/
 ├── dashboard.py               # ไฟล์สำหรับรันหน้า Dashboard
 ├── docker-compose.yml         # การตั้งค่าระบบ Docker
 └── README.md                  # เอกสารประกอบโปรเจกต์
-
-### **วิธีอัปเดตขึ้น GitHub:**
-1. เซฟไฟล์ `README.md` ในเครื่อง
-2. รันคำสั่งใน Terminal:
-   * `git add README.md`
-   * `git commit -m "Add Run Dashboard section and update titles"`
-   * `git push`
+```
